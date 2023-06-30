@@ -10,8 +10,8 @@ dotenv.config();
 
 app.use(cors(corsOptions));
 
-const PORT = process.env.PORT;
-//3008
+const PORT = process.env.PORT||3000;
+
 connectToDatabase();
 
 app.use(v1Router);
