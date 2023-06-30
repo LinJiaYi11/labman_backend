@@ -16,7 +16,8 @@ connectToDatabase();
 
 app.use(v1Router);
 
-startEmailTimer();
+// startEmailTimer();
+console.log(`Server listening on port ${PORT}`);
 
 app.listen(PORT, () => {
 	console.log(`Server listening on port ${PORT}`);
