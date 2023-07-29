@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { connectToDatabase } from "./utils/MySQL/db.js";
 import cors from "cors";
 import {corsOptions} from "./middleware/corslimits.js";
+import errorMessages from "./utils/constants/errorMessages.js";
 // import {startEmailTimer} from "./utils/timer/email/startEmailTimer.js";
 
 dotenv.config();
