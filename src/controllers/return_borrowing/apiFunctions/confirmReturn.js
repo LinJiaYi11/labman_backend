@@ -6,7 +6,7 @@ import { updateReturnedAmount } from "../helperFunctions/updateReturnedAmount.js
 import { updateBorrowingStatus } from "../helperFunctions/updateBorrowingStatus.js";
 import errorMessages from "../../../utils/constants/errorMessages.js";
 
-async function confirmReturn(req, res) {
+async function confirmReturn(req, res,next) {
 	try {
 		const borrow_id = req.params.borrow_id;
 		const return_amount = parseInt(req.query.return_amount);
@@ -40,11 +40,7 @@ async function confirmReturn(req, res) {
 		return res.status(200).json({ success: "Returned equipment successfully" });
 
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: " + error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
 

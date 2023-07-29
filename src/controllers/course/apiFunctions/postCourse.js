@@ -3,7 +3,7 @@ import errorMessages from "../../../utils/constants/errorMessages.js";
 import { checkCourseDuplicate } from "../helperFunctions/checkCourseDuplicate.js";
 import moment from "moment";
 
-async function newCourse(req, res) {
+async function newCourse(req, res,next) {
 	const { course_id, course_name, coordinator_name,due_date } = req.body;
 	const added_time = moment().format("YYYY-MM-DD HH:mm:ss");
 
@@ -15,11 +15,7 @@ async function newCourse(req, res) {
 
 		return res.status(201).json({ message: "Course created successfully" });
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: "+error.message });
-		}
-		return res.status(500).json({ error: "Internal error: "+error.message });
+		next(error);
 	}
 }
 

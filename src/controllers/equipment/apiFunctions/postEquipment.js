@@ -2,7 +2,7 @@ import pool from "../../../utils/MySQL/db.js";
 import errorMessages from "../../../utils/constants/errorMessages.js";
 import moment from "moment";
 
-async function newEquipmentType(req, res) {
+async function newEquipmentType(req, res,next) {
 	const { type_name, total_amount, available_amount } = req.body;
 	const removable = true;
 	const reserved_amount = 0;
@@ -15,11 +15,7 @@ async function newEquipmentType(req, res) {
 
 		return res.status(201).json({ message: "Equipment type created successfully" });
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(404).json({ error: "Bad request: "+error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " +error.message });
+		next(error);
 	}
 }
 

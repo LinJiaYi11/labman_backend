@@ -2,7 +2,7 @@ import pool from "../../../utils/MySQL/db.js";
 import { checkEquipmentRemovable } from "../helperFunctions/checkEquipmentRemovable.js";
 import errorMessages from "../../../utils/constants/errorMessages.js";
 
-async function deleteEquipment(req, res) {
+async function deleteEquipment(req, res,next) {
 	try {
 		const type_id = req.params.type_id;
 		const removable = await checkEquipmentRemovable(pool, type_id);
@@ -17,11 +17,7 @@ async function deleteEquipment(req, res) {
 			return res.status(200).json({ message: "Equipment is deleted successfully" });
 		}
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: "+error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " +error.message });
+		next(error);
 	}
 }
 

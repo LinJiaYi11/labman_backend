@@ -1,7 +1,7 @@
 import pool from "../../../utils/MySQL/db.js";
 import errorMessages from "../../../utils/constants/errorMessages.js";
 
-async function getRequestLogs(req, res) {
+async function getRequestLogs(req, res,next) {
 	if (req.query.student_id || req.query.type_name || req.query.start_date || req.query.end_date) {
 		return getfilteredRequestLogs(req, res);
 	} else {
@@ -9,16 +9,12 @@ async function getRequestLogs(req, res) {
 			const [results] = await pool.query("SELECT * FROM request_log ORDER BY log_time DESC");
 			return res.status(200).json(results);
 		} catch (error) {
-			console.error(error);
-			if (Object.values(errorMessages).includes(error.message)) {
-				return res.status(404).json({ error: "Bad request: " + error.message });
-			}
-			return res.status(500).json({ error: "Internal error: " + error.message });
+			next(error);
 		}
 	}
 }
 
-async function getfilteredRequestLogs(req, res) {
+async function getfilteredRequestLogs(req, res,next) {
 
 	const { student_id, type_name, start_date, end_date } = req.query;
 
@@ -59,11 +55,7 @@ async function getfilteredRequestLogs(req, res) {
 		const [results] = await pool.query(sql, params);
 		return res.status(200).json(results);
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: " + error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
 

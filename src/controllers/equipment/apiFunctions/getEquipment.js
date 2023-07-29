@@ -1,7 +1,7 @@
 import pool from "../../../utils/MySQL/db.js";
 import errorMessages from "../../../utils/constants/errorMessages.js";
 
-async function getEquipmentTypes(req, res) {
+async function getEquipmentTypes(req, res,next) {
 	if (req.query.type_name) {
 		return getEquipmentTypeByName(req, res);
 	} else {
@@ -9,16 +9,12 @@ async function getEquipmentTypes(req, res) {
 			const [results] = await pool.query("SELECT * FROM equipment_type ORDER BY last_edit_time DESC");
 			return res.status(200).json(results);
 		} catch (error) {
-			console.error(error);
-			if (Object.values(errorMessages).includes(error.message)) {
-				return res.status(400).json({ error: "Bad request: "+error.message });
-			}
-			return res.status(500).json({ error: "Error retrieving equipment types" });
+			next(error);
 		}
 	}
 }
 
-async function getEquipmentTypeByName(req, res) {
+async function getEquipmentTypeByName(req, res,next) {
 	const type_name = req.query.type_name;
 
 	try {
@@ -33,11 +29,7 @@ async function getEquipmentTypeByName(req, res) {
 
 		return res.status(200).json(results);
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(404).json({ error: "Bad request: "+error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " +error.message });
+		next(error);
 	}
 }
 

@@ -3,7 +3,7 @@ import errorMessages from "../../../utils/constants/errorMessages.js";
 import moment from "moment";
 import { checkTypeExistsInPackage} from "../helperFunctions/checkTypeExistsInPackage.js";
 
-async function updateTypeInPackage(req, res) {
+async function updateTypeInPackage(req, res,next) {
 	const { package_id, type_id} = req.params;
 	const { type_name,upper_bound_amount } = req.body;
 
@@ -18,11 +18,7 @@ async function updateTypeInPackage(req, res) {
 
 		return res.status(200).json({ message: "type info in package updated successfully" });
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(404).json({ error: "Bad request: " + error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
 

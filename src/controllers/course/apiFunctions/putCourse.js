@@ -3,7 +3,7 @@ import errorMessages from "../../../utils/constants/errorMessages.js";
 import moment from "moment";
 import { checkCourseExists } from "../helperFunctions/checkCourseExists.js";
 
-async function updateCourse(req, res) {
+async function updateCourse(req, res,next) {
 	const { course_id } = req.params;
 	const { course_name, coordinator_name, due_date } = req.body;
 
@@ -18,11 +18,7 @@ async function updateCourse(req, res) {
 
 		return res.status(200).json({ message: "Course updated successfully" });
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(404).json({ error: "Bad request: " + error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
 

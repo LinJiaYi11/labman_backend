@@ -2,7 +2,7 @@ import pool from "../../../utils/MySQL/db.js";
 import errorMessages from "../../../utils/constants/errorMessages.js";
 import { checkCourseExists } from "../helperFunctions/checkCourseExists.js";
 
-async function getCourse(req, res) {
+async function getCourse(req, res,next) {
 	try {
 		if (req.query.course_id || req.query.course_name || req.query.coordinator_name) {
 			return getFilteredCourse(req, res);
@@ -16,15 +16,11 @@ async function getCourse(req, res) {
 
 		return res.status(200).json(results);
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(404).json({ error: error.message });
-		}
-		return res.status(500).json({ error: error.message });
+		next(error);
 	}
 }
 
-async function getCourseById(req, res) {
+async function getCourseById(req, res,next) {
 	try {
 		const { course_id } = req.params;
 
@@ -32,15 +28,11 @@ async function getCourseById(req, res) {
 		return res.status(200).json(result);
 
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(404).json({ error: "Bad request: " + error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
 
-async function getFilteredCourse(req, res) {
+async function getFilteredCourse(req, res,next) {
 	try {
 		const { course_id, course_name, coordinator_name } = req.query;
   
@@ -80,13 +72,7 @@ async function getFilteredCourse(req, res) {
 
 		return res.status(200).json(results);
 	} catch (error) {
-		console.error(error);
-
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(404).json({ error: "Bad request: " + error.message });
-		}
-
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
   

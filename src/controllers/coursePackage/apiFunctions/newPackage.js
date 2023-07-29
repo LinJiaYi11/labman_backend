@@ -3,7 +3,7 @@ import errorMessages from "../../../utils/constants/errorMessages.js";
 import { checkPackageDuplicate } from "../helperFunctions/checkPackageDuplicate.js";
 import moment from "moment";
 
-async function newPackage(req, res) {
+async function newPackage(req, res, next) {
 	const { course_id } = req.params;
 	const { package_name } = req.body;
 	const added_time = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -17,11 +17,7 @@ async function newPackage(req, res) {
 
 		return res.status(201).json({ message: "Course package created successfully" });
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: " + error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
 

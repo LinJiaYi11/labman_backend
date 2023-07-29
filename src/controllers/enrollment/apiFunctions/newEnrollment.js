@@ -1,10 +1,9 @@
 import pool from "../../../utils/MySQL/db.js";
-import errorMessages from "../../../utils/constants/errorMessages.js";
 import { checkUserExists } from "../../users/helperFunctions/checkUserExists.js";
 import { checkEnrollmentDuplicate } from "../helperFunctions/checkEnrollmentDuplicate.js";
 import { checkCourseExists } from "../../course/helperFunctions/checkCourseExists.js";
 
-async function newEnrollment(req, res) {
+async function newEnrollment(req, res,next) {
 
 	try {
 		const { course_id, student_id } = req.params;
@@ -19,11 +18,7 @@ async function newEnrollment(req, res) {
 
 		return res.status(201).json({ message: "Enrollments created successfully" });
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: " + error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
 

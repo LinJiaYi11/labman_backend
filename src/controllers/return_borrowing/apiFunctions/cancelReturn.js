@@ -4,9 +4,8 @@ import { fetchBorrowingRecord } from "../helperFunctions/fetchBorrowingRecord.js
 import { updateAvailableAmountAndRemovable } from "../../equipment/helperFunctions/updateAvailableAmountAndRemovable.js";
 import { updateReturnedAmount } from "../helperFunctions/updateReturnedAmount.js";
 import { updateBorrowingStatus } from "../helperFunctions/updateBorrowingStatus.js";
-import errorMessages from "../../../utils/constants/errorMessages.js";
 
-async function cancelReturn(req, res) {
+async function cancelReturn(req, res,next) {
 	try {
 		const borrow_id = req.params.borrow_id;
 		const cancel_return_amount = parseInt(req.query.return_amount);
@@ -40,11 +39,7 @@ async function cancelReturn(req, res) {
 		});
 		return res.status(200).json({ success: "Cancel return equipment successfully" });
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: " + error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
 

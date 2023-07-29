@@ -9,7 +9,7 @@ import errorMessages from "../../../utils/constants/errorMessages.js";
 import { updateAvailableAmountAndRemovable } from "../../equipment/helperFunctions/updateAvailableAmountAndRemovable.js";
 import {updateReservedAmount} from "../../equipment/helperFunctions/updateReservedAmount.js";
 
-async function cancelRequest(req,res) {
+async function cancelRequest(req,res,next) {
 	try {
 		const { request_id } = req.params; 
 		const { cancel_reason } = req.body; 
@@ -46,11 +46,7 @@ async function cancelRequest(req,res) {
 		});
 		return res.status(200).json({ success: "Request cancelled successfully" });
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: "+error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " +error.message });
+		next(error);
 	}
 }
 

@@ -1,6 +1,7 @@
 import pool from "../../../utils/MySQL/db.js";
 import errorMessages from "../../../utils/constants/errorMessages.js";
 import { checkUserExists } from "../helperFunctions/checkUserExists.js";
+
 export async function loginValidation(req, res,next) {
 	try {
 		const student_id = req.params.student_id;

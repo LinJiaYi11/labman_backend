@@ -3,7 +3,7 @@ import errorMessages from "../../../utils/constants/errorMessages.js";
 import { checkTypeInPackageDuplicate } from "../helperFunctions/checkTypeInPackageDuplicate.js";
 import moment from "moment";
 
-async function newTypeInPackage(req, res) {
+async function newTypeInPackage(req, res,next) {
 	try {
 		const { package_id, type_id } = req.params;
 		const { type_name, upper_bound_amount } = req.body;
@@ -16,11 +16,7 @@ async function newTypeInPackage(req, res) {
 
 		return res.status(201).json({ message: "new type in package created successfully" });
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: " + error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
 

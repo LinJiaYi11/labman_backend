@@ -8,7 +8,7 @@ import errorMessages from "../../../utils/constants/errorMessages.js";
 import { updateReservedAmount } from "../../equipment/helperFunctions/updateReservedAmount.js";
 import { updateAvailableAmountAndRemovable } from "../../equipment/helperFunctions/updateAvailableAmountAndRemovable.js";
 
-async function newRequest(req, res) {
+async function newRequest(req, res,next) {
 	try {
 		const { type_id, type_name, student_id, borrow_amount,  package_id, upper_bound_amount} = req.body;
 
@@ -64,13 +64,7 @@ async function newRequest(req, res) {
 
 		return res.status(200).json({ message: "New request created successfully" });
 	} catch (error) {
-		console.error(error);
-
-		// Send error response
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: "+error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " +error.message });
+		next(error);
 	}
 }
 

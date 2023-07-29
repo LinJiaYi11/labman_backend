@@ -10,7 +10,7 @@ import { statusIsNew } from "../helperFunctions/checkRequestStatus.js";
 import errorMessages from "../../../utils/constants/errorMessages.js";
 import {updateReservedAmount} from "../../equipment/helperFunctions/updateReservedAmount.js";
 
-async function collectRequest(req,res) {
+async function collectRequest(req,res,next) {
 	try {
 		// Extract request records with request params
 		const { request_id } = req.params;
@@ -42,11 +42,7 @@ async function collectRequest(req,res) {
 
 		return res.status(200).json({ success: "Request collected and log inserted successfully" });
 	} catch (error) {
-		console.log(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: "+error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " +error.message });
+		next(error);
 	}
 }
 

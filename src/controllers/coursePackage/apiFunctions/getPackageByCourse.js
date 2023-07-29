@@ -2,7 +2,7 @@ import pool from "../../../utils/MySQL/db.js";
 import errorMessages from "../../../utils/constants/errorMessages.js";
 import { checkCourseExists } from "../../course/helperFunctions/checkCourseExists.js";
 
-async function getPackageByCourse(req, res) {
+async function getPackageByCourse(req, res,next) {
 	const { course_id } = req.params;
 
 	try {
@@ -18,11 +18,7 @@ async function getPackageByCourse(req, res) {
 		}
 		return res.status(200).json(results);
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(404).json({ error: "Bad request: " + error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
 

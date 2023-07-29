@@ -10,7 +10,7 @@ import { updateReservedAmount } from "../../equipment/helperFunctions/updateRese
 import { getRequestById } from "../helperFunctions/getRequestById.js";
 import { updateAvailableAmountAndRemovable } from "../../equipment/helperFunctions/updateAvailableAmountAndRemovable.js";
 
-async function editRequest(req, res) {
+async function editRequest(req, res,next) {
 	try {
 		const { request_id } = req.params;
 
@@ -48,11 +48,7 @@ async function editRequest(req, res) {
 		});
 		return res.status(200).json({ success: "Request updated and log inserted successfully" });
 	} catch (error) {
-		console.log(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: " + error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
 

@@ -1,8 +1,7 @@
 import pool from "../../../utils/MySQL/db.js";
-import errorMessages from "../../../utils/constants/errorMessages.js";
 import { checkUserExists } from "../../users/helperFunctions/checkUserExists.js";
 
-async function getEnrollbyStudentId(req, res) {
+async function getEnrollbyStudentId(req, res,next) {
 	const { student_id } = req.params;
 	try {
 		await checkUserExists(pool, student_id);
@@ -15,10 +14,7 @@ async function getEnrollbyStudentId(req, res) {
 			return res.status(200).json(result);
 		}
 	} catch (error) {
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(404).json({ error: "Bad request: " + error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
 

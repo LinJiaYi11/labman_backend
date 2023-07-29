@@ -1,7 +1,7 @@
 import pool from "../../../utils/MySQL/db.js";
 import errorMessages from "../../../utils/constants/errorMessages.js";
 
-async function getReturns(req, res) {
+async function getReturns(req, res,next) {
 
 	let query = `SELECT * FROM borrowings WHERE borrow_status = '${req.query.borrow_status}'`;
 	const conditions = [];
@@ -23,11 +23,7 @@ async function getReturns(req, res) {
 
 		return res.status(200).json(results);
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: " + error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " + error.message });
+		next(error);
 	}
 }
 

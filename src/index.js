@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { connectToDatabase } from "./utils/MySQL/db.js";
 import cors from "cors";
 import { corsOptions } from "./middleware/corslimits.js";
+import errorHandler from "./middleware/errorHandler.js";
 import errorMessages from "./utils/constants/errorMessages.js";
 // import {startEmailTimer} from "./utils/timer/email/startEmailTimer.js";
 
@@ -17,15 +18,7 @@ connectToDatabase();
 
 app.use(v1Router);
 
-app.use((err, req, res, next) => {
-	console.error(err.stack); // Log error stack trace to the console
-
-	if (Object.values(errorMessages).includes(err.message)) {
-		res.status(400).json({ error: "Bad request: " + err.message });
-	} else {
-		res.status(500).json({ error: "Internal error: " + err.message });
-	}
-});
+app.use(errorHandler); 
 
 // startEmailTimer();
 

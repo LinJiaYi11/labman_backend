@@ -3,7 +3,7 @@ import errorMessages from "../../../utils/constants/errorMessages.js";
 import moment from "moment";
 import { getEquipmentById } from "../helperFunctions/getEquipmentById.js";
 
-async function editEquipment(req, res) {
+async function editEquipment(req, res,next) {
 	const { type_id } = req.params;
 	const { type_name, total_amount } = req.body;
 	const edit_time = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -26,11 +26,7 @@ async function editEquipment(req, res) {
 
 		return res.status(200).json({ message: "Equipment edited successfully" });
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: "+error.message });
-		}
-		return res.status(500).json({ error: "Internal error: " +error.message });
+		next(error);
 	}
 }
 

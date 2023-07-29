@@ -1,8 +1,7 @@
 import pool from "../../../utils/MySQL/db.js";
-import errorMessages from "../../../utils/constants/errorMessages.js";
 import { checkUserExists } from "../helperFunctions/checkUserExists.js";
 
-async function updateUser(req, res) {
+async function updateUser(req, res,next) {
 	const { student_id } = req.params;
 	const { email } = req.body;
 
@@ -15,11 +14,7 @@ async function updateUser(req, res) {
 
 		return res.status(200).json({ message: "User updated successfully" });
 	} catch (error) {
-		console.error(error);
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(400).json({ error: "Bad request: "+error.message });
-		}
-		return res.status(500).json({ error: "Internal error: "+error.message });
+		next(error);
 	}
 }
 
