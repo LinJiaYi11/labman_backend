@@ -10,7 +10,7 @@ export async function loginValidation(req, res) {
 
 		const query = "SELECT password FROM students_user WHERE student_id = ?";
 		const [result] = await pool.query(query, [student_id]);
-		const passwordMatches = await bcrypt.compare(password, result[0].password);
+		const passwordMatches = await bcrypt.compare(password, result.password);
 
 		if (passwordMatches) {
 			return res.status(200).json({ message: "User logged in successfully" });
