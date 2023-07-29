@@ -1,4 +1,4 @@
-import errorMessages from "./utils/constants/errorMessages.js";
+import errorMessages from "../utils/constants/errorMessages.js";
 
 function errorHandler(err, req, res, next) {
     console.error(err.stack); // Log error stack trace to the console
