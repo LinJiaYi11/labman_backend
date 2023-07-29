@@ -15,11 +15,11 @@ const PORT = process.env.PORT||3000;
 
 connectToDatabase();
 
-app.use((error, req, res, next) => {
-    console.error(error.stack); // Log error stack trace to the console
+app.use((err, req, res, next) => {
+    console.error(err.stack); // Log error stack trace to the console
 
-    if (Object.values(errorMessages).includes(error.message)) {
-        res.status(404).json({ message: error.message });
+    if (Object.values(errorMessages).includes(err.message)) {
+        res.status(404).json({ message: err.message });
     } else {
         res.status(500).json({ error: "Server Error" });
     }

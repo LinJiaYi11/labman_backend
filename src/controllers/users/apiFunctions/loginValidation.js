@@ -13,6 +13,8 @@ export async function loginValidation(req, res) {
 		// console.log(result[0]);
 		if (result[0].password === password) {
 			return res.status(200).json({ message: "User logged in successfully" });
+		}else {
+			throw new Error('Password does not match.'); // added error throwing when password doesn't match
 		}
 	} catch (error) {
 		next(error);
