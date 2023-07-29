@@ -3,7 +3,7 @@ import { v1Router } from "./routes/index.js";
 import dotenv from "dotenv";
 import { connectToDatabase } from "./utils/MySQL/db.js";
 import cors from "cors";
-import {corsOptions} from "./middleware/corslimits.js";
+import { corsOptions } from "./middleware/corslimits.js";
 import errorMessages from "./utils/constants/errorMessages.js";
 // import {startEmailTimer} from "./utils/timer/email/startEmailTimer.js";
 
@@ -11,20 +11,20 @@ dotenv.config();
 
 app.use(cors(corsOptions));
 
-const PORT = process.env.PORT||3000;
+const PORT = process.env.PORT || 3000;
 
 connectToDatabase();
 
 app.use(v1Router);
 
 app.use((err, req, res, next) => {
-    console.error(err.stack); // Log error stack trace to the console
+	console.error(err.stack); // Log error stack trace to the console
 
-    if (Object.values(errorMessages).includes(err.message)) {
-        res.status(401).json({ message: err.message });
-    } else {
-        res.status(500).json({ error: "Server Error" });
-    }
+	if (Object.values(errorMessages).includes(err.message)) {
+		res.status(400).json({ error: "Bad request: " + err.message });
+	} else {
+		res.status(500).json({ error: "Internal error: " + err.message });
+	}
 });
 
 // startEmailTimer();
