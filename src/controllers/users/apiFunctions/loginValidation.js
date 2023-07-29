@@ -15,9 +15,6 @@ export async function loginValidation(req, res) {
 			return res.status(200).json({ message: "User logged in successfully" });
 		}
 	} catch (error) {
-		if (Object.values(errorMessages).includes(error.message)) {
-			return res.status(401).json({ message: error.message });
-		}
-		return res.status(500).json({ error: "incorrect password" });
+		next(error);
 	}
 }

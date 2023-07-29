@@ -16,6 +16,16 @@ connectToDatabase();
 
 app.use(v1Router);
 
+app.use((err, req, res, next) => {
+    console.error(err.stack); // Log error stack trace to the console
+
+    if (Object.values(errorMessages).includes(err.message)) {
+        res.status(404).json({ message: err.message });
+    } else {
+        res.status(500).json({ error: "incorrect password" });
+    }
+});
+
 // startEmailTimer();
 
 app.listen(PORT, () => {
