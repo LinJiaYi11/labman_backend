@@ -5,15 +5,18 @@ export async function loginValidation(req, res) {
 	try {
 		const student_id = req.params.student_id;
 		const password = req.body.password;
-        
+
 		await checkUserExists(pool, student_id);
 
 		const query = "SELECT password FROM students_user WHERE student_id = ?";
 		const [result] = await pool.query(query, [student_id]);
-		// console.log(result[0]);
-		if (result[0].password === password) {
+		const passwordMatches = await bcrypt.compare(password, result[0].password);
+
+		if (passwordMatches) {
 			return res.status(200).json({ message: "User logged in successfully" });
 		}
+		return res.status(401).json({ message: "Incorrect username or password" });
+
 	} catch (error) {
 		next(error);
 	}
