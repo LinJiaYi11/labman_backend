@@ -14,7 +14,7 @@ export async function loginValidation(req, res,next) {
 		if (result[0].password === password) {
 			return res.status(200).json({ message: "User logged in successfully" });
 		}else {
-			throw new Error('Password does not match.'); // added error throwing when password doesn't match
+			throw new Error(errorMessages.PASSWORD_DOESNOT_MATCH); // added error throwing when password doesn't match
 		}
 	} catch (error) {
 		next(error);

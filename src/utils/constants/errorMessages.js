@@ -9,6 +9,7 @@ const errorMessages = {
 	//student
 	STUDENT_DOESNOT_EXIST: "The student does not exist",
 	DUPLICATE_USER: "Duplicate user",
+	PASSWORD_DOESNOT_MATCH: "Password does not match",
 
 	//equipment
 	EQUIPMENT_TYPE_DOESNOT_EXIST: "The equipment type does not exist",
