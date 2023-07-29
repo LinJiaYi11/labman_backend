@@ -23,7 +23,7 @@ app.use((err, req, res, next) => {
     if (Object.values(errorMessages).includes(err.message)) {
         res.status(404).json({ message: err.message });
     } else {
-        res.status(500).json({ error: "incorrect username or password" });
+        res.status(500).json({ error: "Server Error" });
     }
 });
 
